@@ -3,7 +3,6 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import validates
 from config import db
 
-
 class Favorite(db.Model):
     __tablename__ = 'favorites'
 

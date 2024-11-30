@@ -10,12 +10,16 @@ from flask_restful import Resource
 from config import app, db, api
 # Add your model imports
 from models.city import City
+from models.favorite import Favorite
+from models.user import User
 
 # Views go here!
 
 @app.route('/')
 def index():
     return '<h1>Project Server</h1>'
+
+    
 
 
 
