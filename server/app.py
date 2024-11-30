@@ -9,9 +9,7 @@ from flask_restful import Resource
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models.city import City
-from models.favorite import Favorite
-from models.user import User
+from models import City, Favorite, User
 
 # Views go here!
 
