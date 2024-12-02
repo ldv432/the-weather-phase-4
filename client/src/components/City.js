@@ -1,7 +1,6 @@
-// cities.js
 import React, { useEffect, useState } from "react";
-
-const Cities = () => {
+import Link from "react-router-dom"
+const City = () => {
   const [cities, setCities] = useState([]);
   const [error, setError] = useState(null);
 
@@ -39,4 +38,4 @@ const Cities = () => {
   );
 };
 
-export default Cities;
+export default City;

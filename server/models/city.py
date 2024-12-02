@@ -5,7 +5,7 @@ class City(db.Model, SerializerMixin):
     __tablename__ = 'cities'
 
     # Serialization rules
-    serialize_rules = ('-favorites.city')
+    serialize_rules = ('-favorites.city', '-favorites')
 
     # Attributes
     id = db.Column(db.Integer, primary_key=True)

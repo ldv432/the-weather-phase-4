@@ -1,0 +1,84 @@
+/* Apply Varela font globally */
+body {
+    font-family: 'Varela', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f6f6f1; /* Optional background */
+  }
+  
+  /* General container styling for the home page */
+  .home-container {
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Add padding to ensure proper spacing */
+  }
+  
+  /* Title styling specific to home */
+  .home-container .title {
+    font-size: 8rem; 
+    font-weight: bold;
+    margin: 10px;
+    color: #333; /* Darker text color */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Adds shadow */
+  }
+  
+  .home-container .highlight {
+    color: #007bff; /* Blue highlight for "WEATHER" */
+  }
+  
+  /* Weather icons styling specific to home */
+  .home-container .weather-icons {
+    margin: 40px 0;
+    font-size: 6rem; /* Larger icons */
+    color: #000000; /* Optional: match the highlight color */
+  }
+  
+  .home-container .weather-icons i {
+    margin: 0 50px; 
+  }
+  
+  /* Buttons styling specific to home with shadow */
+  .home-container .btn {
+    text-decoration: none;
+    font-family: 'Varela', sans-serif; /* Ensure buttons use Varela */
+    color: white;
+    font-size: 2rem; /* Bigger button text */
+    font-weight: bold;
+    padding: 15px 30px; /* Increase button padding */
+    border-radius: 10px; /* Rounded corners */
+    margin: 0 15px;
+    display: inline-block;
+    background-color: #007bff; /* Default button color */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow */
+    transition: all 0.3s ease-in-out; /* Smooth hover animation */
+  }
+  
+  /* Log In button specific to home */
+  .home-container .login-btn {
+    background-color: #007bff; /* Blue color */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Sign Up button specific to home */
+  .home-container .signup-btn {
+    background-color: #6c757d; /* Gray color */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .home-container .btn:hover {
+    opacity: 0.9;
+    transform: scale(1.2); /* Slightly enlarge on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+  }
+  
+  /* Tagline styling specific to home */
+  .home-container .tagline {
+    font-size: 2rem; /* Larger tagline */
+    color: #a8b0b4;
+    margin-top: 50px;
+  }
+  
