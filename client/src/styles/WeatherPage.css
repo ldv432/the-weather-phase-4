@@ -33,13 +33,13 @@ body {
     background-color: #cce7ff;
     border-radius: 20px;
     padding: 20px;
-    display: flex; /* Use flexbox for layout */
-    flex-direction: column; /* Stack items vertically */
-    align-items: center; /* Align items to the left */
-    justify-content: center; /* Optional: adjust vertical alignment */
-    text-align: left; /* Align text to the left */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally inside the card */
+    justify-content: center; /* Center items vertically inside the card */
+    text-align: center; /* Align text to the center */
     width: 300px; /* Fixed width */
-    margin-left: 5%;
+    margin: auto; /* Center horizontally */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
   }
   
@@ -81,10 +81,11 @@ body {
   }
   
   .forecast-grid {
-    display: flex;
-    justify-content: center;
-    gap: 20px; /* Increase spacing between cards */
-    margin-top: -400px;
+    display: flex; /* Use flexbox for layout */
+    flex-wrap: wrap; /* Allow wrapping to the next row */
+    gap: 20px; /* Add spacing between cards */
+    justify-content: center; /* Center align cards */
+    padding: 20px;
   }
   
   .forecast-card {
@@ -140,26 +141,6 @@ body {
     }
   }
   
-  /* Weather Alerts */
-  .weather-alerts {
-    background-color: #cce7ff;
-    border-radius: 10px;
-    margin: 20px auto;
-    padding: 15px 20px; /* Padding for spacing */
-    max-width: 75%; /* Limit maximum width */
-    display: inline-block; /* Makes the width fit the content */
-    font-size: 1rem;
-    color: #333;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Consistent shadow */
-    transition: all 0.3s ease-in-out;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  }
-  
-  .weather-alerts:hover {
-    transform: translateY(-5px); /* Slight lift on hover */
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
-  }
   
   /* Search Bar Styling */
 .search-bar {

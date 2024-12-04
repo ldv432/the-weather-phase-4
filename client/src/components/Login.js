@@ -1,11 +1,62 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import "../styles/Login.css"; // Assuming your CSS file
+import { Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup"; // For validation
+import "../styles/Login.css";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  // Define Yup validation schema
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .matches(
+        /^(?=.*[A-Z])(?=.*\W).{10,}$/,
+        "Password constraints: 10 characters, 1 uppercase, and 1 symbol."
+      )
+      .required("Password is required"),
+  });
+  
+
+  // Use Formik for form management
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit: async (values, { setSubmitting, setFieldError }) => {
+      try {
+        const response = await fetch("http://127.0.0.1:5555/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
+
+        if (!response.ok) {
+          throw new Error("Invalid email or password");
+        }
+
+        const data = await response.json();
+        console.log("Login successful:", data);
+
+        // Redirect to the dashboard or home page
+        navigate("/weather");
+      } catch (err) {
+        setFieldError("general", err.message); // Show a general error
+      } finally {
+        setSubmitting(false); // Re-enable the form
+      }
+    },
+  });
+
   return (
     <div className="login-container">
-
       {/* Title and Tagline */}
       <h1 className="title">
         THE <span className="highlight">WEATHER</span>
@@ -18,13 +69,20 @@ const Login = () => {
         <i className="wi wi-windy"></i>
       </div>
       {/* Login Form */}
-      <form className="login-form">
+      <form className="login-form" onSubmit={formik.handleSubmit}>
         <div className="input-group">
           <input
             type="email"
-            placeholder="enter your email"
-            className="input-field"
+            name="email"
+            placeholder="Enter your email"
+            className={`input-field ${formik.errors.email && formik.touched.email ? "input-error" : ""}`}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
+          {formik.errors.email && formik.touched.email && (
+            <p className="error-text">{formik.errors.email}</p>
+          )}
           <p className="helper-text">
             Don't have an account? <Link to="/signup">Click here to sign up</Link>
           </p>
@@ -32,16 +90,24 @@ const Login = () => {
         <div className="input-group">
           <input
             type="password"
-            placeholder="enter your password"
-            className="input-field"
+            name="password"
+            placeholder="Enter your password"
+            className={`input-field ${formik.errors.password && formik.touched.password ? "input-error" : ""}`}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
+          {formik.errors.password && formik.touched.password && (
+            <p className="error-text">{formik.errors.password}</p>
+          )}
           <p className="helper-text">
             <Link to="/reset-password">Click here to change your password</Link>
           </p>
         </div>
+        {formik.errors.general && <p className="error-text">{formik.errors.general}</p>}
         <div className="button-group">
-          <button type="submit" className="btn login-btn">
-            Sign In
+          <button type="submit" className="btn login-btn" disabled={formik.isSubmitting}>
+            {formik.isSubmitting ? "Signing In..." : "Sign In"}
           </button>
           <Link to="/home" className="btn back-btn">
             Go Back

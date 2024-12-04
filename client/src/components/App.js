@@ -17,6 +17,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/weather" element={<WeatherPage />} />
+        <Route path="/weather/:city" element={<WeatherPage />} />
       </Routes>
     </Router>
   );
