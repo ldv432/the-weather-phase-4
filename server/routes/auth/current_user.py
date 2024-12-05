@@ -12,4 +12,4 @@ class CurrentUser(Resource):
                 return make_response({"error": "Unauthorized user."}, 401)
             return make_response({"error": "Unauthorized user. Please login again"}, 401)
         except Exception as e:
-            return {"error": str(e)}, 422
+            return {"error": str(e)}, 500

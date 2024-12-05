@@ -16,3 +16,4 @@ class Signup(Resource):
             return {"error": str(e.orig)}, 422
         except Exception as e:
             return {"error": str(e)}, 422
+        

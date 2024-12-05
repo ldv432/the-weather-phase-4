@@ -11,7 +11,6 @@ class Users(Resource):
             return {"error": str(e)}, 400
         
     def post(self):
-
         data = request.json
         username = data.get('username')
         email = data.get('email')

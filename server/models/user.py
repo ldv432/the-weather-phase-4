@@ -12,9 +12,7 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String(20), unique=True)
     email = db.Column(db.String, unique=True, index=True)
     _password_hash = db.Column("password_hash", db.String(20))
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-
+  
     #set relationship
     favorites = db.relationship('Favorite', back_populates='user', cascade='all, delete-orphan')
 
