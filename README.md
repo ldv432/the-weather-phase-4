@@ -69,7 +69,7 @@ Welcome to **the weather**, a dynamic and user-friendly weather application that
    ```
 2. Create and activate a virtual environment:
    ```bash
-   python3 -m venv venv
+   pipenv install && pipenv shell
    source venv/bin/activate  # For Windows: venv\Scripts\activate
    ```
 3. Install dependencies:
