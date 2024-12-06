@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import "../styles/Cities.css"
 
 const City = () => {
   const [cities, setCities] = useState([])
@@ -27,15 +28,19 @@ const City = () => {
 
   return (
     <div>
-      <h1>City Names</h1>
-      <ul>
+      <h1 className="cities-title-text">CLICK ON A CITY FOR</h1>
+        <h1 className="title">
+        THE <span className="highlight">WEATHER</span>
+      </h1>
+      <div className="city-buttons-grid">
         {cities.map((city, index) => (
-          <ul key={index}>
+          <button className="cities-button" key={index}>
             <Link to={`/weather/${city}`}>{city}</Link>
-          </ul>
+          </button>
         ))}
-      </ul>
+      </div>
     </div>
+
   )
 }
 

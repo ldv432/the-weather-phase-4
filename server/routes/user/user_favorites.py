@@ -3,10 +3,14 @@ from flask import session
 from models.user import User
 
 class CurrentUserFavoritesResource(Resource):
-    def get(self):
-        user_id = session.get('user_id')
-        if not user_id:
+    def get(self, user_id):
+        
+        session_user_id = session.get('user_id')
+        if not session_user_id:
             return {"error": "User not authenticated."}, 401
+
+        if session_user_id != user_id:
+            return {"error": "Unauthorized access to another user's data."}, 403
 
         user = User.query.get(user_id)
         if not user:

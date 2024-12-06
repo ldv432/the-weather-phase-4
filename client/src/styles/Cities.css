@@ -1,0 +1,48 @@
+.cities-title-text {
+    display: flex; /* Enables flexbox layout */
+    flex-wrap: wrap; /* Allows buttons to wrap to the next line if needed */
+    gap: 1rem; /* Adds space between buttons */
+    justify-content: center; /* Centers buttons horizontally */
+    align-items: center; /* Centers buttons vertically */
+    margin: 0rem;
+    font-size: 2rem;
+    font-family: "Varela", sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Adds shadow */
+  }
+
+.city-buttons-grid {
+    display: flex; /* Enables flexbox layout */
+    flex-wrap: wrap; /* Allows buttons to wrap to the next line if needed */
+    gap: 1rem; /* Adds space between buttons */
+    justify-content: center; /* Centers buttons horizontally */
+    align-items: center; /* Centers buttons vertically */
+    margin: 1rem 0;
+  }
+  
+  .cities-button {
+    padding: 0.5rem 1rem; /* Adds padding to buttons */
+    font-size: 1rem;
+    font-family: "Varela", sans-serif;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* Blue background */
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Adds shadow */
+    transition: background-color 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Add shadow for depth */
+  }
+  
+  .cities-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-3px); /* Slightly lift the card */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+  }
+  
+  .cities-button a {
+    color: inherit; /* Ensures the link inherits the button color */
+    text-decoration: none; /* Removes underline */
+  }
+  

@@ -1,11 +1,12 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useFormik } from "formik";
-import * as Yup from "yup"; // For validation
-import "../styles/Login.css";
+import React from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { useFormik } from "formik"
+import * as Yup from "yup" 
+import "../styles/Login.css"
+import toast from "react-hot-toast"
 
-const Login = () => {
-  const navigate = useNavigate();
+const Login = ( { updateCurrentUser } ) => {
+  const navigate = useNavigate()
 
   // Define Yup validation schema
   const validationSchema = Yup.object({
@@ -18,7 +19,7 @@ const Login = () => {
         "Password constraints: 10 characters, 1 uppercase, and 1 symbol."
       )
       .required("Password is required"),
-  });
+  })
   
 
   // Use Formik for form management
@@ -30,30 +31,31 @@ const Login = () => {
     validationSchema,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       try {
-        const response = await fetch("http://127.0.0.1:5555/login", {
+        const response = await fetch("/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(values),
-        });
+        })
 
         if (!response.ok) {
-          throw new Error("Invalid email or password");
+          throw new Error("Invalid email or password")
         }
 
-        const data = await response.json();
-        console.log("Login successful:", data);
+        const data = await response.json()
+        toast.success("Welcome to the weather!")
+        updateCurrentUser(data)
 
-        // Redirect to the dashboard or home page
-        navigate("/weather");
+        navigate("/weather")
+
       } catch (err) {
-        setFieldError("general", err.message); // Show a general error
+        setFieldError("general", err.message) 
       } finally {
-        setSubmitting(false); // Re-enable the form
+        setSubmitting(false) 
       }
     },
-  });
+  })
 
   return (
     <div className="login-container">
@@ -103,11 +105,13 @@ const Login = () => {
           <p className="helper-text">
             <Link to="/reset-password">Click here to change your password</Link>
           </p>
+
+          
         </div>
         {formik.errors.general && <p className="error-text">{formik.errors.general}</p>}
         <div className="button-group">
           <button type="submit" className="btn login-btn" disabled={formik.isSubmitting}>
-            {formik.isSubmitting ? "Signing In..." : "Sign In"}
+            {formik.isSubmitting ? "Logging In..." : "Log In"}
           </button>
           <Link to="/home" className="btn back-btn">
             Go Back
@@ -116,7 +120,7 @@ const Login = () => {
         <p className="tagline">for when you just need the weather</p>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

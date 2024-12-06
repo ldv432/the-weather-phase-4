@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "../styles/WeatherPage.css";
 
-const WeatherPage = () => {
-  const [city, setCity] = useState("Colorado Springs");
+const WeatherPage = ({
+  currentUser,
+  addNewFavorite,
+  deleteFavorite,
+  userFavorites,
+  checkCityFavorite,
+}) => {
+  const navigate = useNavigate();
+  const { city: cityParam } = useParams(); // Get city from the URL
+  const [city, setCity] = useState(cityParam || "Colorado Springs");
   const [latitude, setLatitude] = useState(38.8339); // Default latitude
   const [longitude, setLongitude] = useState(-104.8214); // Default longitude
   const [temperature, setTemperature] = useState(null);
@@ -11,8 +20,14 @@ const WeatherPage = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [searchInput, setSearchInput] = useState("");
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [favoriteId, setFavoriteId] = useState(null);
+  const [cityId, setCityId] = useState(null);
 
-  // Weather condition to icon mapping
+  useEffect(() => {
+    setIsFavorited(checkCityFavorite(cityParam));
+  }, [cityParam, checkCityFavorite]);
+
   const mapWeatherCodeToIcon = (code) => {
     const weatherIcons = {
       0: "wi-day-sunny", // Clear sky
@@ -44,17 +59,32 @@ const WeatherPage = () => {
       96: "wi-thunderstorm", // Thunderstorm with slight hail
       99: "wi-thunderstorm", // Thunderstorm with heavy hail
     };
-  
     return weatherIcons[code] || "wi-na";
   };
-  
 
-  // Fetch weather data from the API
+  const fetchFavorites = async () => {
+    try {
+      const response = await fetch("/users/favorites", {
+        method: "GET",
+        credentials: "include", // Ensures session cookie is sent
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch favorites");
+      }
+
+      const favorites = await response.json();
+      console.log("User favorites:", favorites);
+      addNewFavorite(favorites); // Assuming you use React state
+    } catch (error) {
+      console.error("Error fetching user favorites:", error);
+    }
+  };
+
   const fetchWeatherData = async (lat, lon) => {
     setIsLoading(true);
     try {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&temperature_unit=fahrenheit&current_weather=true&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`;
-      console.log("Request URL:", url);
 
       const response = await fetch(url);
       if (!response.ok) {
@@ -62,11 +92,11 @@ const WeatherPage = () => {
       }
 
       const data = await response.json();
-      console.log("Fetched Data:", data);
 
-      // Update state with the fetched data
       setTemperature(data.current_weather?.temperature ?? "N/A");
-      setCondition(mapWeatherCodeToIcon(data.current_weather?.weathercode ?? 0));
+      setCondition(
+        mapWeatherCodeToIcon(data.current_weather?.weathercode ?? 0)
+      );
       setForecast(
         data.daily.time.map((time, index) => ({
           date: time,
@@ -79,49 +109,114 @@ const WeatherPage = () => {
       console.error("Error fetching weather data:", error);
       setError(error.message);
     } finally {
-      setIsLoading(false); // Stop loading
-      console.log("Finished fetching weather data.");
+      setIsLoading(false);
     }
   };
 
-  // Handle user search
-  const handleSearch = async (event) => {
+  const handleSearch = async (event, cityName) => {
     event.preventDefault();
-    setError(null);
+    const cityToSearch = cityName || searchInput.trim();
 
-    if (searchInput.trim()) {
+    if (cityToSearch) {
+      setError(null);
+
       try {
         const geoResponse = await fetch(
-          `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchInput.trim())}&language=en&count=1`
+          `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+            cityToSearch
+          )}&language=en&count=1`
         );
         if (!geoResponse.ok) {
           throw new Error("Failed to fetch city coordinates");
         }
 
         const geoData = await geoResponse.json();
-        console.log("Geocoding Response:", geoData);
 
         if (geoData.results && geoData.results.length > 0) {
-          const { latitude, longitude, name } = geoData.results[0];
+          const { latitude, longitude, name, id } = geoData.results[0]; // Ensure the API returns a city ID
           setCity(name);
+          navigate(`/weather/${name}`, { replace: true });
           setLatitude(parseFloat(latitude));
           setLongitude(parseFloat(longitude));
+          setCityId(id); // Set the cityId here
           await fetchWeatherData(parseFloat(latitude), parseFloat(longitude));
         } else {
           setError("City not found");
         }
       } catch (error) {
-        console.error("Error during geocoding:", error);
         setError(error.message);
       }
     }
   };
 
-  // Fetch default weather data on page load
   useEffect(() => {
-    console.log("useEffect triggered on mount...");
-    fetchWeatherData(latitude, longitude);
-  }, []);
+    if (!cityParam) {
+      navigate(`/weather/Colorado%20Springs`);
+    }
+    if (cityParam) {
+      handleSearch({ preventDefault: () => {} }, cityParam);
+    }
+  }, [cityParam]);
+
+  useEffect(() => {
+    if (currentUser) {
+      fetchFavorites();
+    }
+  }, [currentUser, cityId]);
+
+
+  
+  const toggleFavorite = async () => {
+    try {
+      const foundFavorite = userFavorites.find(userFav => userFav.city.name === city)
+      if (foundFavorite){
+        setFavoriteId(foundFavorite.id)
+      }
+      const url = isFavorited
+        ? `/favorites/${foundFavorite.id}` // delete
+        : `/favorites`; // post
+
+      const method = isFavorited ? "DELETE" : "POST";
+      console.log(isFavorited)
+      const body = isFavorited
+        ? null
+        : JSON.stringify({
+            city_id: cityId,
+            city_name: city,
+            lat: latitude,
+            lon: longitude,
+          });
+
+      console.log("Request Details:", { url, method, body });
+
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body,
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update favorite status");
+      }
+
+      const data = await response.json();
+      if (response.status === 201) {
+        addNewFavorite(data);
+        setFavoriteId(data.id);
+      
+      } else {
+        setFavoriteId(null);
+        deleteFavorite(data.id);
+      }
+      
+      setIsFavorited(!isFavorited);
+    } catch (error) {
+      
+      
+      console.error("Error toggling favorite:", error);
+    }
+  };
 
   return (
     <div className="weather-page">
@@ -153,13 +248,21 @@ const WeatherPage = () => {
             <h2>{city}</h2>
             <i className={`wi ${condition} weather-icon`}></i>
             <p className="temperature">
-              {temperature !== null ? `${parseInt(temperature)}°F` : "No data available"}
+              {temperature !== null
+                ? `${parseInt(temperature)}°F`
+                : "No data available"}
             </p>
+            <button
+              className={`favorite-button ${isFavorited ? "favorited" : ""}`}
+              onClick={toggleFavorite}
+            >
+              {isFavorited ? "❤️ Favorited" : "🤍 Favorite"}
+            </button>
           </div>
 
-          <div>
-            <h3>The Week Ahead</h3>
-          </div>
+          
+          <h1 classname="title">7 Day Forecast</h1>
+        
           <div className="forecast-section">
             <div className="forecast-grid">
               {forecast.map((day, index) => (
@@ -167,6 +270,7 @@ const WeatherPage = () => {
                   <h4>
                     {new Date(day.date).toLocaleDateString("en-US", {
                       weekday: "long",
+                      timeZone: "UTC", // Ensures consistent UTC-based date handling
                     })}
                   </h4>
                   <i className={`wi ${day.icon} weather-icon`}></i>

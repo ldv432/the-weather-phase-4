@@ -1,18 +1,19 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useFormik } from "formik";
-import * as Yup from "yup"; // For form validation
-import "../styles/Signup.css";
+import React from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { useFormik } from "formik"
+import * as Yup from "yup" // For form validation
+import "../styles/Signup.css"
+import toast from "react-hot-toast"
 
-const Signup = () => {
-  const navigate = useNavigate();
+const Signup = ( {updateCurrentUser} ) => {
+  const navigate = useNavigate()
 
   // Define Yup validation schema
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Email is required"),
     username: Yup.string().min(3, "Must be at least 3 characters").required("Username is required"),
     password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
-  });
+  })
 
   // Use Formik to manage form state and submission
   const formik = useFormik({
@@ -26,36 +27,37 @@ const Signup = () => {
     validateOnChange: false, // Disable validation on change
     onSubmit: async (values, { setSubmitting, setFieldError, validateForm }) => {
       try {
-        const response = await fetch("http://127.0.0.1:5555/signup", {
+        const response = await fetch("/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(values),
-        });
+        })
 
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || "Signup failed");
+          const errorData = await response.json()
+          throw new Error(errorData.error || "Signup failed")
         }
 
-        const data = await response.json();
-        console.log("Signup successful:", data);
+        const data = await response.json()
+        toast.success("Welcome to the weather!")
+        updateCurrentUser(data)
 
         // Redirect to another page after success
-        navigate("/weather");
+        navigate("/weather")
       } catch (err) {
         // Trigger form validation and show errors only after unsuccessful signup
-        const errors = await validateForm();
+        const errors = await validateForm()
         if (Object.keys(errors).length > 0) {
-          console.log("Validation errors:", errors);
+          console.log("Validation errors:", errors)
         }
-        setFieldError("general", err.message); // Show general error message
+        setFieldError("general", err.message) // Show general error message
       } finally {
-        setSubmitting(false); // Re-enable the form
+        setSubmitting(false) // Re-enable the form
       }
     },
-  });
+  })
 
   return (
     <div className="signup-container">
@@ -127,7 +129,7 @@ const Signup = () => {
       </form>
       <p className="tagline">for when you just need the weather</p>
     </div>
-  );
-};
+  )
+}
 
-export default Signup;
+export default Signup

@@ -16,6 +16,7 @@ body {
     font-weight: bold;
     margin: 0;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Adds shadow */
+    text-align: center;
   }
   
   .highlight {
@@ -65,6 +66,7 @@ body {
     font-size: 3rem;
     font-weight: bold;
     margin: 10px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
   }
   
   .favorite {
@@ -85,7 +87,7 @@ body {
     flex-wrap: wrap; /* Allow wrapping to the next row */
     gap: 20px; /* Add spacing between cards */
     justify-content: center; /* Center align cards */
-    padding: 20px;
+    padding: 0px;
   }
   
   .forecast-card {
@@ -176,8 +178,9 @@ body {
     transform: scale(1.05); /* Slight hover effect */
   }
   
-  /* Logout Button */
-  .logout-button {
+  /* Cities Button */
+  .cities-button {
+    font-family: "Varela", sans-serif;
     margin-top: 20px;
     background-color: #007bff;
     color: white;
@@ -188,7 +191,100 @@ body {
     cursor: pointer;
   }
   
-  .logout-button:hover {
+  .cities-button:hover {
     background-color: #0056b3;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: center;
+    gap: 5rem; /* Space between buttons */
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0px; /* Rounds navbar corners */
+  }
+  
+  .nav-button {
+    background-color: #007BFF; 
+    color: #ffffff; 
+    border: 2px solid #007bff; /* Blue border */
+    border-radius: 20px; /* Rounded corners */
+    padding: 0.5rem 1rem; /* Button padding */
+    font-size: 1rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s; /* Smooth hover effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add soft shadow */
+  }
+  
+  .nav-button:hover {
+    background-color: #007bff; /* Blue background on hover */
+    color: white; /* White text on hover */
+  }
+  
+  .nav-button:focus {
+    outline: none; /* Removes the default focus outline */
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.5); /* Adds a focus ring */
+  }
+  
+  .favorite-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-top: 3px;
+  }
+  
+  .favorite-button.favorited {
+    color: red;
+  }
+  .favorite-button:not(.favorited) {
+    color: gray;
+  }
+  
+  .favorite-button:hover {
+    opacity: 0.8;
+  }
+
+  .edit-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .edit-button:hover {
+    color: #0056b3;
+  }
+  
+  .edit-nickname input {
+    margin: 5px;
+    padding: 5px;
+  }
+  
+  .edit-nickname button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .edit-nickname button:hover {
+    background-color: #0056b3;
+  }
+
+  .nickname-container {
+    margin-top: 5px; /* Add space between button and nickname */
+    text-align: center; /* Center-align the nickname text */
+  }
+  
+  .nickname-text {
+    font-size: 14px; /* Smaller font size */
+    color: #555; /* Subtle color */
+    font-style: italic; /* Optional: Italicized text */
   }
   

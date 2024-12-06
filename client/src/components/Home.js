@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Home.css";
 
-const Home = () => {
+const Home = ( {currentUser} ) => {
   return (
     <div className="home-container">
       <h1 className="title">
@@ -15,10 +15,10 @@ const Home = () => {
         <i className="wi wi-day-showers"></i>
         <i className="wi wi-windy"></i>
       </div>
-      <div className="buttons">
+      {!currentUser && <div className="buttons">
         <Link to="/login" className="btn login-btn">Log In</Link>
         <Link to="/signup" className="btn signup-btn">Sign Up</Link>
-      </div>
+      </div>}
       <p className="tagline">for when you just need the weather</p>
     </div>
   );
